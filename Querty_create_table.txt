@@ -1,0 +1,60 @@
+-- Создание таблицы "Пациенты"
+CREATE TABLE Patients (
+    patient_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    birth_date DATE NOT NULL,
+    medical_record VARCHAR(255) UNIQUE -- Связь один-к-одному с таблицей MedicalRecords
+);
+
+-- Создание таблицы "Медицинские карты" (MedicalRecords) для связи один-к-одному
+CREATE TABLE MedicalRecords (
+    record_id SERIAL PRIMARY KEY,
+    patient_id INT UNIQUE,
+    record_details TEXT,
+    FOREIGN KEY (patient_id) REFERENCES Patients(patient_id)
+);
+
+-- Создание таблицы "Медикаменты"
+CREATE TABLE Medications (
+    medication_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    FOREIGN KEY (manufacturer_id) REFERENCES Manufacturers(manufacturer_id)
+);
+
+-- Создание таблицы "Рецепты"
+CREATE TABLE Prescriptions (
+    prescription_id SERIAL PRIMARY KEY,
+    patient_id INT,
+    medication_id INT,
+    date_prescribed DATE NOT NULL,
+    dosage VARCHAR(50),
+    FOREIGN KEY (patient_id) REFERENCES Patients(patient_id),
+    FOREIGN KEY (medication_id) REFERENCES Medications(medication_id)
+);
+
+-- Создание таблицы "Компоненты"
+CREATE TABLE Components (
+    component_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+
+
+-- Создание промежуточной таблицы для связи многие-ко-многим между "Медикаменты" и "Компоненты"
+CREATE TABLE MedicationComponents (
+    medication_id INT,
+    component_id INT,
+    PRIMARY KEY (medication_id, component_id),
+    FOREIGN KEY (medication_id) REFERENCES Medications(medication_id),
+    FOREIGN KEY (component_id) REFERENCES Components(component_id)
+);
+
+-- Примеры данных
+INSERT INTO Patients (name, birth_date, medical_record) VALUES ('John Doe', '1980-01-01', 'Record123');
+INSERT INTO MedicalRecords (patient_id, record_details) VALUES (1, 'No known allergies. Blood type: O+.');
+INSERT INTO Manufacturers (name, address, contact_info) VALUES ('PharmaCorp', '123 Main St, Anytown', '555-1234');
+INSERT INTO Medications (name, manufacturer_id, description) VALUES ('Aspirin', 1, 'Pain reliever');
+INSERT INTO Components (name, description) VALUES ('Acetylsalicylic Acid', 'Active ingredient in aspirin');
+INSERT INTO MedicationComponents (medication_id, component_id) VALUES (1, 1);
+INSERT INTO Prescriptions (patient_id, medication_id, date_prescribed, dosage) VALUES (1, 1, '2024-05-28', '100mg twice daily');
