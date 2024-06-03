@@ -4,11 +4,6 @@ public class MedicationComponentDTO {
     private int medicationId;
     private int componentId;
 
-    public MedicationComponentDTO(int medicationId, int componentId) {
-        this.medicationId = medicationId;
-        this.componentId = componentId;
-    }
-
     public MedicationComponentDTO() {
 
     }

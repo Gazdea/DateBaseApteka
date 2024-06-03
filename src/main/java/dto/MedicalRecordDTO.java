@@ -36,9 +36,4 @@ public class MedicalRecordDTO {
         return this;
     }
 
-    public MedicalRecordDTO(int record_id, int patient_id, String record_details) {
-        this.record_id = record_id;
-        this.patient_id = patient_id;
-        this.record_details = record_details;
-    }
 }

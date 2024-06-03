@@ -20,7 +20,7 @@ public class PatientService {
         return patientDAO.getAllPatients().stream().map(PatientMapper::toDTO).collect(Collectors.toList());
     }
 
-    public PatientDTO getPatientById(int id) throws SQLException, IOException {
+    public PatientDTO getPatientById(int id) {
         return PatientMapper.toDTO(patientDAO.getPatientById(id));
     }
 

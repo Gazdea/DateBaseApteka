@@ -9,14 +9,6 @@ public class PrescriptionDTO {
     private Date date_of_prescribed;
     private String dosage;
 
-    public PrescriptionDTO(int prescriptionID, int patientID, int medicationID, Date date_of_prescribed, String dosage) {
-        this.prescriptionID = prescriptionID;
-        this.patientID = patientID;
-        this.medicationID = medicationID;
-        this.date_of_prescribed = date_of_prescribed;
-        this.dosage = dosage;
-    }
-
     public PrescriptionDTO() {
 
     }

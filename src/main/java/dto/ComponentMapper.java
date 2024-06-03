@@ -13,11 +13,10 @@ public class ComponentMapper {
     }
 
     public static ComponentBuilder toEntity(ComponentDTO componentDTO) {
-        ComponentBuilder componentBuilder = new ComponentBuilder.Builder()
+        return new ComponentBuilder.Builder()
             .setComponent_id(componentDTO.getComponent_id())
             .setName(componentDTO.getName())
             .setDescription(componentDTO.getDescription())
             .build();
-        return componentBuilder;
     }
 }

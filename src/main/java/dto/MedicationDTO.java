@@ -1,6 +1,5 @@
 package dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MedicationDTO {
@@ -8,13 +7,6 @@ public class MedicationDTO {
     private String name;
     private String description;
     private List<ComponentDTO> components;
-
-    public MedicationDTO(int medication_id, String name, String description) {
-        this.medication_id = medication_id;
-        this.name = name;
-        this.description = description;
-        this.components = new ArrayList<ComponentDTO>();
-    }
 
     public List<ComponentDTO> getComponents() {
         return components;

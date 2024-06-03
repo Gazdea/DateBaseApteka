@@ -28,7 +28,7 @@ public class MedicationServlet extends HttpServlet {
             MedicationComponentDAO medComponentDAO = new MedicationComponentDAO();
             medComponentService = new MedicationComponentService(medComponentDAO);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -39,7 +39,7 @@ public class MedicationServlet extends HttpServlet {
             request.setAttribute("medications", medications);
             request.getRequestDispatcher("/medications.jsp").forward(request, response);
         } catch (ServletException | IOException | SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -49,55 +49,66 @@ public class MedicationServlet extends HttpServlet {
             MedicationDTO medicationDTO = new MedicationDTO();
             MedicationComponentDTO medComponentDTO = new MedicationComponentDTO();
             String action = request.getParameter("action");
-            if (action.equals("add")) {
-                medicationDTO.setName(request.getParameter("name"));
-                medicationDTO.setDescription(request.getParameter("description"));
-                medicationService.addMedication(medicationDTO);
-                response.sendRedirect("/medications");
+            switch (action) {
+                case "add":
+                    medicationDTO.setName(request.getParameter("name"));
+                    medicationDTO.setDescription(request.getParameter("description"));
+                    medicationService.addMedication(medicationDTO);
+                    response.sendRedirect("/medications");
+                    break;
 
-            } else if (action.equals("update")) {
-                medicationDTO.setMedication_id(Integer.parseInt(request.getParameter("updatemedicationId")));
-                medicationDTO.setName(request.getParameter("updatename"));
-                medicationDTO.setDescription(request.getParameter("updatedescription"));
-                medicationService.updateMedication(medicationDTO);
-                response.sendRedirect("/medications");
+                case "addcomponent":
+                    medComponentDTO.setMedicationId(Integer.parseInt(request.getParameter("addmedicamentid")));
+                    medComponentDTO.setComponentId(Integer.parseInt(request.getParameter("addcomponentid")));
+                    System.out.println(medComponentDTO.getMedicationId());
+                    System.out.println(medComponentDTO.getComponentId());
+                    medComponentService.addMedicationComponent(medComponentDTO);
+                    response.sendRedirect("/medications");
+                    break;
 
-            } else if (action.equals("delete")) {
-                int medicationId = Integer.parseInt(request.getParameter("medicationId"));
-                medicationService.deleteMedication(medicationId);
-                response.sendRedirect("/medications");
-
-            } else if (action.equals("addcomponent")) {
-                medComponentDTO.setMedicationId(Integer.parseInt(request.getParameter("addmedicamentid")));
-                medComponentDTO.setComponentId(Integer.parseInt(request.getParameter("addcomponentid")));
-                System.out.println(medComponentDTO.getMedicationId());
-                System.out.println(medComponentDTO.getComponentId());
-                medComponentService.addMedicationComponent(medComponentDTO);
-                response.sendRedirect("/medications");
-
-            } else if(action.equals("deletecomponent")) {
-                int medicationId = Integer.parseInt(request.getParameter("deletemedication_id"));
-                int componentId = Integer.parseInt(request.getParameter("deletecomponent_id"));
-                medComponentService.deleteMedicationComponent(medicationId, componentId);
-                response.sendRedirect("/medications");
+                case "deletecomponent": {
+                    int medicationId = Integer.parseInt(request.getParameter("deletemedication_id"));
+                    int componentId = Integer.parseInt(request.getParameter("deletecomponent_id"));
+                    medComponentService.deleteMedicationComponent(medicationId, componentId);
+                    response.sendRedirect("/medications");
+                    break;
+                }
+                case "update":
+                    doPut(request, response);
+                    break;
+                case "delete":
+                    doDelete(request, response);
+                    break;
             }
         } catch (IOException | SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         try {
             MedicationDTO medicationDTO = new MedicationDTO();
-            MedicationComponentDTO medComponentDTO = new MedicationComponentDTO();
-            String action = req.getParameter("action");
+                medicationDTO.setMedication_id(Integer.parseInt(req.getParameter("updatemedicationId")));
+                medicationDTO.setName(req.getParameter("updatename"));
+                medicationDTO.setDescription(req.getParameter("updatedescription"));
+                medicationService.updateMedication(medicationDTO);
+                resp.sendRedirect("/medications");
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.fillInStackTrace();
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+                int medicationId = Integer.parseInt(req.getParameter("medicationId"));
+                medicationService.deleteMedication(medicationId);
+                resp.sendRedirect("/medications");
+        }
+        catch (Exception e) {
+            e.fillInStackTrace();
+        }
     }
 }

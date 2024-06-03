@@ -20,7 +20,7 @@ public class MedicalRecordService {
         return medicalRecordDAO.getAllMedicalRecords().stream().map(MedicalRecordMapper::toDTO).collect(Collectors.toList());
     }
 
-    public MedicalRecordDTO getMedicalRecordById(int id) throws SQLException, IOException {
+    public MedicalRecordDTO getMedicalRecordById(int id) {
         return MedicalRecordMapper.toDTO(medicalRecordDAO.getMedicalRecordById(id));
     }
 

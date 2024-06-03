@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalRecordDAO {
-    private Connection connection;
+    private final Connection connection;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
@@ -21,7 +21,7 @@ public class MedicalRecordDAO {
     }
 
     // Метод для получения списка всех медицинских записей
-    public List<MedicalRecordBuilder> getAllMedicalRecords() throws SQLException, IOException {
+    public List<MedicalRecordBuilder> getAllMedicalRecords() {
         List<MedicalRecordBuilder> medicalRecords = new ArrayList<>();
 
         try {
@@ -42,7 +42,7 @@ public class MedicalRecordDAO {
                 medicalRecords.add(medicalRecord);
             }
         } catch (SQLException  e){
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return medicalRecords;
     }
@@ -56,7 +56,7 @@ public class MedicalRecordDAO {
             preparedStatement.setString(2, medicalRecord.getRecord_details());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -70,7 +70,7 @@ public class MedicalRecordDAO {
             preparedStatement.setInt(3, medicalRecord.getRecord_id());
             preparedStatement.executeUpdate();
         } catch (SQLException  e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -82,7 +82,7 @@ public class MedicalRecordDAO {
             preparedStatement.setInt(1, recordId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -104,7 +104,7 @@ public class MedicalRecordDAO {
                         .build();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return medicalRecord;
     }
@@ -126,7 +126,7 @@ public class MedicalRecordDAO {
                         .build();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return medicalRecord;
     }

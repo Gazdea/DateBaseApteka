@@ -13,11 +13,10 @@ public class MedicalRecordMapper {
     }
 
     public static MedicalRecordBuilder toEntity(MedicalRecordDTO medicalRecordDTO) {
-        MedicalRecordBuilder medicalRecord = new MedicalRecordBuilder.Builder()
+        return new MedicalRecordBuilder.Builder()
         .setPatient_id(medicalRecordDTO.getPatient_id())
         .setRecord_id(medicalRecordDTO.getRecord_id())
         .setRecord_details(medicalRecordDTO.getRecord_details())
         .build();
-        return medicalRecord;
     }
 }

@@ -3,9 +3,9 @@ package model;
 import java.util.Objects;
 
 public class MedicalRecordBuilder {
-    private int record_id;
-    private int patient_id;
-    private String record_details;
+    private final int record_id;
+    private final int patient_id;
+    private final String record_details;
 
     public MedicalRecordBuilder(Builder builder) {
         this.record_id = builder.record_id;

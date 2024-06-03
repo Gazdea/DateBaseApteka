@@ -2,9 +2,6 @@ package dto;
 
 import model.PatientBuilder;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class PatientMapper {
 
     public static PatientDTO toDTO(PatientBuilder patient) {
@@ -21,12 +18,12 @@ public class PatientMapper {
     }
 
     public static PatientBuilder toEntity(PatientDTO patientDTO) {
-        PatientBuilder patient = new PatientBuilder.Builder()
+        return new PatientBuilder.Builder()
                 .setPatientID(patientDTO.getPatient_id())
                 .setName(patientDTO.getName())
                 .setBirth_date(patientDTO.getBirth_date())
-                .setMedicalRecord(MedicalRecordMapper.toEntity(patientDTO.getMedical_record()))
+                .setMedicalRecord(patientDTO.getMedical_record() != null ? MedicalRecordMapper.toEntity(patientDTO.getMedical_record()) : null)
                 .build();
-        return patient;
+
     }
 }

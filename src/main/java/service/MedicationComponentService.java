@@ -16,7 +16,7 @@ public class MedicationComponentService {
         this.medicationComponentDAO = medicationComponentDAO;
     }
 
-    public List<MedicationComponentDTO> getAllMedicationComponentAsDTO() throws SQLException, IOException {
+    public List<MedicationComponentDTO> getAllMedicationComponentAsDTO() {
         return medicationComponentDAO.getAllMedicationComponents().stream().map(MedicationComponentMapper::toDTO).collect(Collectors.toList());
     }
 

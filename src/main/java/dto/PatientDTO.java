@@ -8,13 +8,6 @@ public class PatientDTO {
     private Date birth_date;
     private MedicalRecordDTO medical_record;
 
-    public PatientDTO(int patient_id, String name, Date birth_date, MedicalRecordDTO medical_record) {
-        this.patient_id = patient_id;
-        this.name = name;
-        this.birth_date = birth_date;
-        this.medical_record = medical_record;
-    }
-
     public PatientDTO() {
 
     }

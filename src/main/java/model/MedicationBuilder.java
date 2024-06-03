@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class MedicationBuilder {
-    private int medication_id;
-    private String name;
-    private String description;
-    private List<ComponentBuilder> components;
+    private final int medication_id;
+    private final String name;
+    private final String description;
+    private final List<ComponentBuilder> components;
 
-    public MedicationBuilder() {
-    }
 
     public MedicationBuilder(Builder builder) {
         this.medication_id = builder.medication_id;

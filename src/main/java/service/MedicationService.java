@@ -24,15 +24,15 @@ public class MedicationService {
         medicationDAO.addMedicationBuilder(MedicationMapper.toEntity(medication));
     }
 
-    public void updateMedication(MedicationDTO medication) throws SQLException, IOException {
+    public void updateMedication(MedicationDTO medication) {
         medicationDAO.updateMedicationBuilder(MedicationMapper.toEntity(medication));
     }
 
-    public void deleteMedication(int id) throws SQLException, IOException {
+    public void deleteMedication(int id) {
         medicationDAO.deleteMedicationBuilder(id);
     }
 
-    public MedicationDTO getMedicationById(int id) throws SQLException, IOException {
+    public MedicationDTO getMedicationById(int id) {
         return MedicationMapper.toDTO(medicationDAO.getMedicationById(id));
     }
 

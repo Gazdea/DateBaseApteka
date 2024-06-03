@@ -3,8 +3,8 @@ package model;
 import java.util.Objects;
 
 public class MedicationComponentBuilder {
-    private int medicationId;
-    private int componentId;
+    private final int medicationId;
+    private final int componentId;
 
 
     private MedicationComponentBuilder(Builder builder) {

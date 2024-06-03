@@ -30,7 +30,7 @@ public class DateBaseConnectionSingleton {
             try {
                 instance = new DateBaseConnectionSingleton();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         }
         return instance;
@@ -41,7 +41,7 @@ public class DateBaseConnectionSingleton {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         }
     }

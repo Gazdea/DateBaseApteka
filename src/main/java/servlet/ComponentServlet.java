@@ -34,7 +34,7 @@ public class ComponentServlet extends HttpServlet {
             request.setAttribute("components", components);
             request.getRequestDispatcher("/components.jsp").forward(request, response);
         } catch (ServletException | IOException | SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -43,26 +43,47 @@ public class ComponentServlet extends HttpServlet {
         try {
             ComponentDTO componentDTO = new ComponentDTO();
             String action = request.getParameter("action");
-            if (action.equals("add")) {
-                componentDTO.setName(request.getParameter("addname"));
-                componentDTO.setDescription(request.getParameter("adddescription"));
-                componentService.addComponent(componentDTO);
-                response.sendRedirect("/components");
-
-            } else if (action.equals("update")) {
-                componentDTO.setComponent_id(Integer.parseInt(request.getParameter("updateid")));
-                componentDTO.setName(request.getParameter("updatename"));
-                componentDTO.setDescription(request.getParameter("updatedescription"));
-                componentService.updateComponent(componentDTO);
-                response.sendRedirect("/components");
-
-            } else if (action.equals("delete")) {
-                int componentId = Integer.parseInt(request.getParameter("componentId"));
-                componentService.deleteComponent(componentId);
-                response.sendRedirect("/components");
+            switch (action) {
+                case "add":
+                    componentDTO.setName(request.getParameter("addname"));
+                    componentDTO.setDescription(request.getParameter("adddescription"));
+                    componentService.addComponent(componentDTO);
+                    response.sendRedirect("/components");
+                    break;
+                case "update":
+                    doPut(request, response);
+                    break;
+                case "delete":
+                    doDelete(request, response);
+                    break;
             }
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            ComponentDTO componentDTO = new ComponentDTO();
+                componentDTO.setComponent_id(Integer.parseInt(req.getParameter("updateid")));
+                componentDTO.setName(req.getParameter("updatename"));
+                componentDTO.setDescription(req.getParameter("updatedescription"));
+                componentService.updateComponent(componentDTO);
+                resp.sendRedirect("/components");
+        } catch (SQLException | IOException e) {
+            e.fillInStackTrace();
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+                int componentId = Integer.parseInt(req.getParameter("componentId"));
+                componentService.deleteComponent(componentId);
+                resp.sendRedirect("/components");
+        } catch (SQLException | IOException e) {
+            e.fillInStackTrace();
         }
     }
 }

@@ -20,7 +20,7 @@ public class ComponentService {
         return componentDAO.getAllComponents().stream().map(ComponentMapper::toDTO).collect(Collectors.toList());
     }
 
-    public ComponentDTO getComponentById(int id) throws SQLException, IOException {
+    public ComponentDTO getComponentById(int id) {
         return ComponentMapper.toDTO(componentDAO.getComponentById(id));
     }
 

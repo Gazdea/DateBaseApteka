@@ -12,11 +12,10 @@ public class MedicationComponentMapper {
     }
 
     public static MedicationComponentBuilder toEntity(MedicationComponentDTO medicationComponent) {
-        MedicationComponentBuilder medicationComponentBuilder = new MedicationComponentBuilder.Builder()
+        return new MedicationComponentBuilder.Builder()
             .setComponentId(medicationComponent.getComponentId())
             .setMedicationId(medicationComponent.getMedicationId())
             .build();
-        return medicationComponentBuilder;
     }
 
 

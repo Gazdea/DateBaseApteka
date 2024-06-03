@@ -23,11 +23,10 @@ public class MedicationMapper {
     }
 
     public static MedicationBuilder toEntity(MedicationDTO medicationDTO) {
-        MedicationBuilder medicationBuilder = new MedicationBuilder.Builder()
+        return new MedicationBuilder.Builder()
             .setmMedication_id(medicationDTO.getMedication_id())
             .setName(medicationDTO.getName())
             .setDescription(medicationDTO.getDescription())
             .build();
-        return medicationBuilder;
     }
 }

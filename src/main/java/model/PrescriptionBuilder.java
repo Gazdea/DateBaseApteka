@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.Objects;
 
 public class PrescriptionBuilder {
-    private int prescriptionID;
-    private int patientID;
-    private int medicationID;
-    private Date date_of_prescribed;
-    private String dosage;
+    private final int prescriptionID;
+    private final int patientID;
+    private final int medicationID;
+    private final Date date_of_prescribed;
+    private final String dosage;
 
     public  PrescriptionBuilder(Builder builder) {
         this.prescriptionID = builder.prescriptionID;
@@ -56,11 +56,6 @@ public class PrescriptionBuilder {
 
     public Date getDate_of_prescribed() {
         return date_of_prescribed;
-    }
-
-    public PrescriptionBuilder setDate_of_prescribed(java.sql.Date date_of_prescribed) {
-        this.date_of_prescribed = date_of_prescribed;
-        return this;
     }
 
     public String getDosage() {

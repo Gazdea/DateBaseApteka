@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.Objects;
 
 public class PatientBuilder {
-    private int patientID;
-    private String name;
-    private Date birth_date;
-    private MedicalRecordBuilder medicalRecord;
+    private final int patientID;
+    private final String name;
+    private final Date birth_date;
+    private final MedicalRecordBuilder medicalRecord;
 
     public  PatientBuilder(Builder builder) {
         this.patientID = builder.patientID;

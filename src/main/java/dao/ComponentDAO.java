@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComponentDAO {
-    private Connection connection;
+    private final Connection connection;
     private  PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
@@ -23,25 +23,23 @@ public class ComponentDAO {
     // Метод для получения списка всех компонентов
     public List<ComponentBuilder> getAllComponents() {
         List<ComponentBuilder> components = new ArrayList<>();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Components");
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
+        String sql = "SELECT * FROM components";
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int component_id = resultSet.getInt("component_id");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
-
                 ComponentBuilder component = new ComponentBuilder.Builder()
                         .setComponent_id(component_id)
                         .setName(name)
                         .setDescription(description)
                         .build();
-
                 components.add(component);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return components;
     }
@@ -49,48 +47,47 @@ public class ComponentDAO {
 
     // Метод для добавления нового компонента
     public void addComponent(ComponentBuilder component) {
-        PreparedStatement preparedStatement = null;
+        String sql = "INSERT INTO Components (name, description) VALUES (?, ?)";
         try {
-            String sql = "INSERT INTO Components (name, description) VALUES (?, ?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, component.getName());
             preparedStatement.setString(2, component.getDescription());
             preparedStatement.executeUpdate();
         } catch (SQLException  e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     // Метод для обновления информации о компоненте
     public void updateComponent(ComponentBuilder component) {
+        String sql = "UPDATE Components SET name=?, description=? WHERE component_id=?";
         try {
-            String sql = "UPDATE Components SET name=?, description=? WHERE component_id=?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, component.getName());
             preparedStatement.setString(2, component.getDescription());
             preparedStatement.setInt(3, component.getComponent_id());
             preparedStatement.executeUpdate();
         } catch (SQLException  e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     // Метод для удаления компонента по его идентификатору
     public void deleteComponent(int component_id) {
+        String sql = "DELETE FROM Components WHERE component_id=?";
         try {
-            String sql = "DELETE FROM Components WHERE component_id=?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, component_id);
             preparedStatement.executeUpdate();
         } catch (SQLException  e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     public ComponentBuilder getComponentById(int id) {
         ComponentBuilder component = null;
+        String sql = "SELECT * FROM Components WHERE component_id=?";
         try {
-            String sql = "SELECT * FROM Components WHERE component_id=?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
@@ -105,7 +102,7 @@ public class ComponentDAO {
                     .build();
             }
         } catch (SQLException  e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return component;
     }
@@ -117,27 +114,24 @@ public class ComponentDAO {
                 "FROM Components " +
                 "JOIN medicationcomponents ON Components.component_id = medicationcomponents.component_id " +
                 "WHERE medicationcomponents.medication_id = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try {
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    int component_id = resultSet.getInt("component_id");
-                    String name = resultSet.getString("name");
-                    String description = resultSet.getString("description");
-
-                    ComponentBuilder component = new ComponentBuilder.Builder()
-                            .setComponent_id(component_id)
-                            .setName(name)
-                            .setDescription(description)
-                            .build();
-
-                    components.add(component);
-                }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int component_id = resultSet.getInt("component_id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                ComponentBuilder component = new ComponentBuilder.Builder()
+                        .setComponent_id(component_id)
+                        .setName(name)
+                        .setDescription(description)
+                        .build();
+                components.add(component);
             }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return components;
     }
 }

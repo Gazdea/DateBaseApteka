@@ -3,9 +3,9 @@ package model;
 import java.util.Objects;
 
 public class ComponentBuilder {
-    private int component_id;
-    private String name;
-    private String description;
+    private final int component_id;
+    private final String name;
+    private final String description;
 
     public ComponentBuilder(Builder builder) {
         this.component_id = builder.component_id;

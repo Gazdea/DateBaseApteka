@@ -1,7 +1,6 @@
 package servlet;
 
 import dao.MedicalRecordDAO;
-import dao.PatientDAO;
 import dto.MedicalRecordDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.MedicalRecordService;
-import service.PatientService;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,15 +15,14 @@ import java.util.List;
 
 @WebServlet("/medicalrecords")
 public class MedicalRecordServlet extends HttpServlet {
-    private  PatientService patientService;
     private  MedicalRecordService medicalRecordService;
 
     @Override
     public void init() {
         try {
-            PatientDAO patientDAO = new PatientDAO();
+
             MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
-            patientService = new PatientService(patientDAO);
+
             medicalRecordService = new MedicalRecordService(medicalRecordDAO);
         } catch (SQLException |IOException e) {
             throw new RuntimeException(e);
@@ -39,7 +36,7 @@ public class MedicalRecordServlet extends HttpServlet {
             request.setAttribute("medicalrecords", medicalRecords);
             request.getRequestDispatcher("/medicalrecords.jsp").forward(request, response);
         } catch (ServletException | IOException | SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -48,33 +45,47 @@ public class MedicalRecordServlet extends HttpServlet {
         try {
             MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
             String action = request.getParameter("action");
-            if (action.equals("add")) {
-                medicalRecordDTO.setPatient_id(Integer.parseInt(request.getParameter("patient_id")));
-                medicalRecordDTO.setRecord_details(request.getParameter("record_details"));
-                medicalRecordService.addMedicalRecord(medicalRecordDTO);
-                response.sendRedirect("/medicalrecords");
-
-            } else if (action.equals("update")) {
-                medicalRecordDTO.setRecord_id(Integer.parseInt(request.getParameter("updaterecord_id")));
-                medicalRecordDTO.setPatient_id(Integer.parseInt(request.getParameter("updatepatient_id")));
-                medicalRecordDTO.setRecord_details(request.getParameter("updaterecord_details"));
-                medicalRecordService.updateMedicalRecord(medicalRecordDTO);
-                response.sendRedirect("/medicalrecords");
-
-            } else if (action.equals("delete")) {
-                int recordId = Integer.parseInt(request.getParameter("recordId"));
-                medicalRecordService.deleteMedicalRecord(recordId);
-                response.sendRedirect("/medicalrecords");
+            switch (action) {
+                case "add":
+                    medicalRecordDTO.setPatient_id(Integer.parseInt(request.getParameter("patient_id")));
+                    medicalRecordDTO.setRecord_details(request.getParameter("record_details"));
+                    medicalRecordService.addMedicalRecord(medicalRecordDTO);
+                    response.sendRedirect("/medicalrecords");
+                    break;
+                case "update":
+                    doPut(request, response);
+                    break;
+                case "delete":
+                    doDelete(request, response);
+                    break;
             }
-//            } else if (action.equals("select")) {
-//                int recordId = Integer.parseInt(request.getParameter("recordId"));
-//                MedicalRecordDTO medicalRecord = medicalRecordService.getMedicalRecordById(recordId);
-//                PatientDTO patients = patientService.getPatientById(medicalRecord.getPatient_id());
-//                request.setAttribute("patients", patients);
-//                request.getRequestDispatcher("/medicalrecords.jsp").forward(request, response);
-//            }
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
+        }catch (IOException | SQLException e) {
+            e.fillInStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO();
+                medicalRecordDTO.setRecord_id(Integer.parseInt(req.getParameter("updaterecord_id")));
+                medicalRecordDTO.setPatient_id(Integer.parseInt(req.getParameter("updatepatient_id")));
+                medicalRecordDTO.setRecord_details(req.getParameter("updaterecord_details"));
+                medicalRecordService.updateMedicalRecord(medicalRecordDTO);
+                resp.sendRedirect("/medicalrecords");
+        } catch (IOException | SQLException e){
+            e.fillInStackTrace();
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+                int recordId = Integer.parseInt(req.getParameter("recordId"));
+                medicalRecordService.deleteMedicalRecord(recordId);
+                resp.sendRedirect("/medicalrecords");
+        } catch (IOException | SQLException e){
+            e.fillInStackTrace();
         }
     }
 }

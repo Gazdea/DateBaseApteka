@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PrescriptionService {
-    private  PrescriptionDAO prescriptionDAO = null;
+    private final PrescriptionDAO prescriptionDAO;
 
     public PrescriptionService(PrescriptionDAO prescriptionDAO) {
         this.prescriptionDAO = prescriptionDAO;
@@ -20,19 +20,19 @@ public class PrescriptionService {
         return prescriptionDAO.getAllPrescriptions().stream().map(PrescriptionMapper::toDTO).collect(Collectors.toList());
     }
 
-    public  void addPrescription(PrescriptionDTO prescription) throws SQLException, IOException {
+    public  void addPrescription(PrescriptionDTO prescription) throws SQLException {
         prescriptionDAO.addPrescription(PrescriptionMapper.toEntity(prescription));
     }
 
-    public  void updatePrescription(PrescriptionDTO prescription) throws SQLException, IOException {
+    public  void updatePrescription(PrescriptionDTO prescription) throws SQLException {
         prescriptionDAO.updatePrescription(PrescriptionMapper.toEntity(prescription));
     }
 
-    public  void deletePrescription(int id) throws SQLException, IOException {
+    public  void deletePrescription(int id) throws SQLException {
         prescriptionDAO.deletePrescription(id);
     }
 
-    public PrescriptionDTO getPrescriptionByID(int id) throws SQLException, IOException {
+    public PrescriptionDTO getPrescriptionByID(int id) {
        return PrescriptionMapper.toDTO(prescriptionDAO.getPrescriptionByID(id));
 
     }

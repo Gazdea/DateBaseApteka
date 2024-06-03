@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrescriptionDAO {
-    private Connection connection;
+    private final Connection connection;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
@@ -18,11 +18,10 @@ public class PrescriptionDAO {
     }
 
     // Метод для получения списка всех рецептов
-    public List<PrescriptionBuilder> getAllPrescriptions() throws SQLException, IOException {
+    public List<PrescriptionBuilder> getAllPrescriptions() {
         List<PrescriptionBuilder> prescriptions = new ArrayList<>();
-
+        String sql = "SELECT * FROM Prescriptions";
         try {
-            String sql = "SELECT * FROM Prescriptions";
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
 
@@ -44,16 +43,15 @@ public class PrescriptionDAO {
                 prescriptions.add(prescription);
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return prescriptions;
     }
 
     // Метод для добавления нового рецепта
     public void addPrescription(PrescriptionBuilder prescription) {
-        PreparedStatement preparedStatement = null;
+        String sql = "INSERT INTO Prescriptions (patient_id, medication_id, date_prescribed, dosage) VALUES (?, ?, ?, ?)";
         try {
-            String sql = "INSERT INTO Prescriptions (patient_id, medication_id, date_prescribed, dosage) VALUES (?, ?, ?, ?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, prescription.getPatientID());
             preparedStatement.setInt(2, prescription.getMedicationID());
@@ -61,15 +59,14 @@ public class PrescriptionDAO {
             preparedStatement.setString(4, prescription.getDosage());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     // Метод для обновления информации о рецепте
     public void updatePrescription(PrescriptionBuilder prescription) {
-
+        String sql = "UPDATE Prescriptions SET patient_id=?, medication_id=?, date_prescribed=?, dosage=? WHERE prescription_id=?";
         try {
-            String sql = "UPDATE Prescriptions SET patient_id=?, medication_id=?, date_prescribed=?, dosage=? WHERE prescription_id=?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, prescription.getPatientID());
             preparedStatement.setInt(2, prescription.getMedicationID());
@@ -78,26 +75,26 @@ public class PrescriptionDAO {
             preparedStatement.setInt(5, prescription.getPrescriptionID());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     // Метод для удаления рецепта по его идентификатору
     public void deletePrescription(int id) {
+        String sql = "DELETE FROM Prescriptions WHERE prescription_id=?";
         try {
-            String sql = "DELETE FROM Prescriptions WHERE prescription_id=?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     public PrescriptionBuilder getPrescriptionByID(int id) {
         PrescriptionBuilder prescription = null;
+        String sql = "SELECT * FROM Prescriptions WHERE prescription_id=?";
         try {
-            String sql = "SELECT * FROM Prescriptions WHERE prescription_id=?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
 //            preparedStatement.executeUpdate();
@@ -117,7 +114,7 @@ public class PrescriptionDAO {
                         .build();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return prescription;
     }
