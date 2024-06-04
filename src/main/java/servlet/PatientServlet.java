@@ -27,6 +27,8 @@ public class PatientServlet extends HttpServlet {
         }
         catch ( SQLException | IOException e) {
             e.fillInStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

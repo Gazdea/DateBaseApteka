@@ -5,10 +5,10 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DateBaseConnectionSingleton {
-    private final Connection connection;
+    private static Connection connection = null;
     private static DateBaseConnectionSingleton instance;
 
-    private DateBaseConnectionSingleton() throws IOException, SQLException, ClassNotFoundException {
+    private DateBaseConnectionSingleton() throws ClassNotFoundException, SQLException, IOException {
         Properties properties = new Properties();
         properties.load(DateBaseConnectionSingleton.class.getClassLoader().getResourceAsStream("database.properties"));
 
@@ -25,24 +25,10 @@ public class DateBaseConnectionSingleton {
         return connection;
     }
 
-    public static DateBaseConnectionSingleton getInstance() throws SQLException {
+    public static DateBaseConnectionSingleton getInstance() throws SQLException, IOException, ClassNotFoundException {
         if (instance == null || instance.openConnection().isClosed()) {
-            try {
-                instance = new DateBaseConnectionSingleton();
-            } catch (IOException | ClassNotFoundException e) {
-                e.fillInStackTrace();
-            }
+            instance = new DateBaseConnectionSingleton();
         }
         return instance;
-    }
-
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.fillInStackTrace();
-            }
-        }
     }
 }

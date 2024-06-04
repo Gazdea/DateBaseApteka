@@ -19,12 +19,8 @@ public class ComponentServlet extends HttpServlet {
 
     @Override
     public void init() {
-        try {
-            ComponentDAO componentDAO = new ComponentDAO();
-            componentService = new ComponentService(componentDAO);
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        ComponentDAO componentDAO = new ComponentDAO();
+        componentService = new ComponentService(componentDAO);
     }
 
     @Override

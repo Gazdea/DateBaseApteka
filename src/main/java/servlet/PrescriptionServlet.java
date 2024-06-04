@@ -25,6 +25,8 @@ public class PrescriptionServlet extends HttpServlet {
             prescriptionService = new PrescriptionService(prescriptionDAO);
         } catch (SQLException | IOException e) {
             e.fillInStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

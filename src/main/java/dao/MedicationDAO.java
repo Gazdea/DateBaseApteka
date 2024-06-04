@@ -10,10 +10,8 @@ import java.util.List;
 
 public class MedicationDAO {
     private final Connection  connection;
-    private PreparedStatement preparedStatement;
-    private ResultSet resultSet;
 
-    public MedicationDAO() throws SQLException, IOException {
+    public MedicationDAO() throws SQLException, IOException, ClassNotFoundException {
         connection = DateBaseConnectionSingleton.getInstance().openConnection();
     }
 
@@ -21,9 +19,7 @@ public class MedicationDAO {
     public List<MedicationBuilder> getAllMedicationBuilders() {
         List<MedicationBuilder> medicationBuilders = new ArrayList<>();
         String sql = "SELECT medication_id, name, description FROM Medications";
-        try  {
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 int medication_id = resultSet.getInt("medication_id");
                 String name = resultSet.getString("name");
@@ -38,7 +34,7 @@ public class MedicationDAO {
 
                 medicationBuilders.add(builder);
             }
-        } catch (SQLException | IOException e){
+        } catch (SQLException e){
             e.fillInStackTrace();
         }
         return medicationBuilders;
@@ -47,8 +43,7 @@ public class MedicationDAO {
     // Метод для добавления нового медикамента
     public void addMedicationBuilder(MedicationBuilder MedicationBuilder) {
         String sql = "INSERT INTO Medications (name, description) VALUES (?, ?)";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, MedicationBuilder.getName());
             preparedStatement.setString(2, MedicationBuilder.getDescription());
             preparedStatement.executeUpdate();
@@ -60,8 +55,7 @@ public class MedicationDAO {
     // Метод для обновления информации о медикаменте
     public void updateMedicationBuilder(MedicationBuilder MedicationBuilder) {
         String sql = "UPDATE Medications SET name=?, description=? WHERE medication_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, MedicationBuilder.getName());
             preparedStatement.setString(2, MedicationBuilder.getDescription());
             preparedStatement.setInt(3, MedicationBuilder.getmedication_id());
@@ -74,8 +68,7 @@ public class MedicationDAO {
     // Метод для удаления медикамента по его идентификатору
     public void deleteMedicationBuilder(int id) {
         String sql = "DELETE FROM Medications WHERE medication_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -86,11 +79,9 @@ public class MedicationDAO {
     public MedicationBuilder getMedicationById(int id) {
         MedicationBuilder medicationBuilder = null;
         String sql = "SELECT * FROM Medications WHERE medication_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getResultSet();
             if (resultSet.next()) {
                 int medication_id = resultSet.getInt("medication_id");
                 String name = resultSet.getString("name");
@@ -102,7 +93,7 @@ public class MedicationDAO {
                         .setComponents(new ComponentDAO().getComponentByMedicamentId(medication_id))
                         .build();
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.fillInStackTrace();
         }
         return medicationBuilder;

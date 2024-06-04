@@ -29,6 +29,8 @@ public class MedicationServlet extends HttpServlet {
             medComponentService = new MedicationComponentService(medComponentDAO);
         } catch (SQLException | IOException e) {
             e.fillInStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

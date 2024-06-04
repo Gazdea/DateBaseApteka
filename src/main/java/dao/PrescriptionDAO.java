@@ -10,10 +10,8 @@ import java.util.List;
 
 public class PrescriptionDAO {
     private final Connection connection;
-    private PreparedStatement preparedStatement;
-    private ResultSet resultSet;
 
-    public  PrescriptionDAO() throws SQLException, IOException {
+    public  PrescriptionDAO() throws SQLException, IOException, ClassNotFoundException {
         connection = DateBaseConnectionSingleton.getInstance().openConnection();
     }
 
@@ -21,10 +19,7 @@ public class PrescriptionDAO {
     public List<PrescriptionBuilder> getAllPrescriptions() {
         List<PrescriptionBuilder> prescriptions = new ArrayList<>();
         String sql = "SELECT * FROM Prescriptions";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
             while (resultSet.next()) {
                 int prescription_id = resultSet.getInt("prescription_id");
                 int patient_id = resultSet.getInt("patient_id");
@@ -51,8 +46,7 @@ public class PrescriptionDAO {
     // Метод для добавления нового рецепта
     public void addPrescription(PrescriptionBuilder prescription) {
         String sql = "INSERT INTO Prescriptions (patient_id, medication_id, date_prescribed, dosage) VALUES (?, ?, ?, ?)";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, prescription.getPatientID());
             preparedStatement.setInt(2, prescription.getMedicationID());
             preparedStatement.setDate(3, new java.sql.Date(prescription.getDate_of_prescribed().getTime()));
@@ -66,8 +60,7 @@ public class PrescriptionDAO {
     // Метод для обновления информации о рецепте
     public void updatePrescription(PrescriptionBuilder prescription) {
         String sql = "UPDATE Prescriptions SET patient_id=?, medication_id=?, date_prescribed=?, dosage=? WHERE prescription_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, prescription.getPatientID());
             preparedStatement.setInt(2, prescription.getMedicationID());
             preparedStatement.setDate(3, new java.sql.Date(prescription.getDate_of_prescribed().getTime()));
@@ -82,8 +75,7 @@ public class PrescriptionDAO {
     // Метод для удаления рецепта по его идентификатору
     public void deletePrescription(int id) {
         String sql = "DELETE FROM Prescriptions WHERE prescription_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -94,11 +86,9 @@ public class PrescriptionDAO {
     public PrescriptionBuilder getPrescriptionByID(int id) {
         PrescriptionBuilder prescription = null;
         String sql = "SELECT * FROM Prescriptions WHERE prescription_id=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
             preparedStatement.setInt(1, id);
-//            preparedStatement.executeUpdate();
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
             if (resultSet.next()) {
                 int prescription_id = resultSet.getInt("prescription_id");
                 int patient_id = resultSet.getInt("patient_id");

@@ -26,6 +26,8 @@ public class MedicalRecordServlet extends HttpServlet {
             medicalRecordService = new MedicalRecordService(medicalRecordDAO);
         } catch (SQLException |IOException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

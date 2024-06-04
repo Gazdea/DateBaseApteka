@@ -8,7 +8,7 @@ import java.util.List;
 
 public class main {
 
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
 
         PatientDAO patientDAO = new PatientDAO();
         System.out.println(patientDAO.getAllPatients());

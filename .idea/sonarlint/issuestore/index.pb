@@ -34,16 +34,12 @@ Q
 !src/main/java/dto/PatientDTO.java,9\8\98d103098c5cd97a420f70ba79ab85c9b8a6734c
 T
 $src/main/java/dto/PatientMapper.java,7\9\799d5f4e44c78e26555ec50b624c6ff1b59d3137
-X
-(src/main/java/entity/PatientBuilder.java,f\a\fa228fa9015d087303bb3d0754bd47e7e38388ea
 Y
 )src/main/java/service/PatientService.java,3\6\36b8ae75a1feeed920626e905d4e775ba3cb91b3
 Y
 )src/main/java/servlet/PatientServlet.java,1\9\1952e66579c22dc83f54d117b09fcef6288b9ae6
 ^
 .src/main/java/servlet/PrescriptionServlet.java,9\2\9287b8a02cb5b6896af8887e01890ee71d53e2fc
-Z
-*src/main/java/entity/ComponentBuilder.java,3\9\39b20d1036d76d9b261054b116c38d7e473fff85
 S
 #src/main/java/dto/ComponentDTO.java,6\0\60061ef242e6eb11172bb2edd74e227646665528
 V
@@ -58,8 +54,6 @@ _
 /src/main/java/servlet/MedicalRecordServlet.java,4\1\41b10ec03a4dcc32cf818ec899edc4e0e5e7df18
 W
 'src/main/java/dao/MedicalRecordDAO.java,b\1\b151b28f5cab8122167747683570a48c69cd1967
-e
-5src/main/java/servlet/MedicationComponentServlet.java,1\2\12b69fed1ca6203e9044b0cece559cabe347c1c6
 \
 ,src/main/java/servlet/MedicationServlet.java,5\1\51630e64c0ad6816709f5051cc355fe7de3ff967
 ]
@@ -70,12 +64,6 @@ V
 &src/main/java/dao/PrescriptionDAO.java,8\e\8e5a33127a1560353dc2f10c94ae718ebc9ca54d
 Z
 *src/main/java/dto/MedicalRecordMapper.java,b\7\b7ce3ff7a6d7c912dd5b59f6fdef3d8b71a2f6d7
-^
-.src/main/java/entity/MedicalRecordBuilder.java,9\5\95a1e43447411b29c024ba4b5bbf7e6c8a88ee70
-[
-+src/main/java/entity/MedicationBuilder.java,3\6\36cce4d455198f4a9e6f3b9b777d50810ed1aa5f
-d
-4src/main/java/entity/MedicationComponentBuilder.java,c\6\c66f7e3d534c0dcbcf02c2e1dbd4eb694834a4be
 _
 /src/main/java/service/MedicalRecordService.java,d\b\db1f453ca548f51f34c863c2abd848dc1223ac69
 e
@@ -120,3 +108,5 @@ Q.idea/sonarlint/securityhotspotstore/a/b/abe93b554bcf71046909f2bfb77fc0a5020531
 Q.idea/sonarlint/securityhotspotstore/2/7/27a3e464630143919f43bffee7134164faeb98e0,0\a\0a50098ee395af2f5a0906655bf4c0c8ddd32787
 S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+W
+'src/test/java/dao/ComponentDAOTest.java,4\7\47e6502654b37007b2dc9d5fa194dd906282f1bb
