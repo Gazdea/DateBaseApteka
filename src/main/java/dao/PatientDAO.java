@@ -14,6 +14,9 @@ public class PatientDAO {
     public PatientDAO() throws SQLException, IOException, ClassNotFoundException {
         connection = DateBaseConnectionSingleton.getInstance().openConnection();
     }
+    public PatientDAO(Connection connection) throws SQLException, IOException, ClassNotFoundException {
+        this.connection = connection;
+    }
 
     // Метод для получения списка всех пациентов
     public List<PatientBuilder> getAllPatients() {
@@ -29,7 +32,7 @@ public class PatientDAO {
                         .setPatientID(patient_id)
                         .setName(name)
                         .setBirth_date(birth_date)
-                        .setMedicalRecord(new MedicalRecordDAO().getMedicalRecordByPatientId(patient_id))
+                        .setMedicalRecord(new MedicalRecordDAO(connection).getMedicalRecordByPatientId(patient_id))
                         .build();
 
                 patients.add(builder);
@@ -41,15 +44,20 @@ public class PatientDAO {
     }
 
     // Метод для добавления нового пациента
-    public void addPatient(PatientBuilder patient) {
-        String sql = "INSERT INTO Patients (name, birth_date) VALUES (?, ?)";
+    public int addPatient(PatientBuilder patient) {
+        String sql = "INSERT INTO Patients (name, birth_date) VALUES (?, ?) returning patient_id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, patient.getName());
             preparedStatement.setDate(2, new java.sql.Date(patient.getBirth_date().getTime()));
-            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
         } catch (SQLException e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
+        throw new RuntimeException();
     }
 
     // Метод для обновления информации о пациенте
@@ -86,18 +94,19 @@ public class PatientDAO {
     public PatientBuilder getPatientById(int patient_id) {
         PatientBuilder patient = null;
         String sql = "SELECT * FROM Patients WHERE patient_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, patient_id);
-            preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                String name = resultSet.getString("name");
-                Date birth_date = resultSet.getDate("birth_date");
-                patient = new PatientBuilder.Builder()
-                        .setPatientID(patient_id)
-                        .setName(name)
-                        .setBirth_date(birth_date)
-                        .setMedicalRecord(new MedicalRecordDAO().getMedicalRecordByPatientId(patient_id))
-                        .build();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    Date birth_date = resultSet.getDate("birth_date");
+                    patient = new PatientBuilder.Builder()
+                            .setPatientID(patient_id)
+                            .setName(name)
+                            .setBirth_date(birth_date)
+                            .setMedicalRecord(new MedicalRecordDAO(connection).getMedicalRecordByPatientId(patient_id))
+                            .build();
+                }
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);

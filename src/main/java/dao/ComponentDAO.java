@@ -32,17 +32,19 @@ public class ComponentDAO {
     public List<ComponentBuilder> getAllComponents() {
         List<ComponentBuilder> components = new ArrayList<>();
         String sql = "SELECT * FROM components";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                int component_id = resultSet.getInt("component_id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-                ComponentBuilder component = new ComponentBuilder.Builder()
-                        .setComponent_id(component_id)
-                        .setName(name)
-                        .setDescription(description)
-                        .build();
-                components.add(component);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int component_id = resultSet.getInt("component_id");
+                    String name = resultSet.getString("name");
+                    String description = resultSet.getString("description");
+                    ComponentBuilder component = new ComponentBuilder.Builder()
+                            .setComponent_id(component_id)
+                            .setName(name)
+                            .setDescription(description)
+                            .build();
+                    components.add(component);
+                }
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
@@ -52,15 +54,20 @@ public class ComponentDAO {
 
 
     // Метод для добавления нового компонента
-    public void addComponent(ComponentBuilder component) {
-        String sql = "INSERT INTO Components (name, description) VALUES (?, ?)";
+    public int addComponent(ComponentBuilder component) throws SQLException {
+        String sql = "INSERT INTO Components (name, description) VALUES (?, ?) returning component_id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, component.getName());
             preparedStatement.setString(2, component.getDescription());
-            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
         } catch (SQLException  e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
+        throw new SQLException();
     }
 
     // Метод для обновления информации о компоненте
@@ -72,7 +79,7 @@ public class ComponentDAO {
             preparedStatement.setInt(3, component.getComponent_id());
             preparedStatement.executeUpdate();
         } catch (SQLException  e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -89,21 +96,23 @@ public class ComponentDAO {
 
     public ComponentBuilder getComponentById(int id) {
         ComponentBuilder component = null;
-        String sql = "SELECT * FROM Components WHERE component_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
+        String sql = "SELECT * FROM Components WHERE component_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
-            if (resultSet != null) {
-                int component_id = resultSet.getInt("component_id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-                component = new ComponentBuilder.Builder()
-                        .setComponent_id(component_id)
-                        .setName(name)
-                        .setDescription(description)
-                        .build();
+            try ( ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int component_id = resultSet.getInt("component_id");
+                    String name = resultSet.getString("name");
+                    String description = resultSet.getString("description");
+                    component = new ComponentBuilder.Builder()
+                            .setComponent_id(component_id)
+                            .setName(name)
+                            .setDescription(description)
+                            .build();
+                }
             }
         } catch (SQLException  e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
         return component;
     }

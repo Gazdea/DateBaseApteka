@@ -12,8 +12,12 @@ public class MedicationComponentDAO {
     private final Connection connection;
 
     public MedicationComponentDAO() throws SQLException, IOException, ClassNotFoundException {
-        connection = DateBaseConnectionSingleton.getInstance().openConnection();
+        this.connection = DateBaseConnectionSingleton.getInstance().openConnection();
     }
+    public MedicationComponentDAO(Connection connection) {
+        this.connection = connection;
+    }
+
 
     // Метод для получения списка всех компонентов медикаментов
     public List<MedicationComponentBuilder> getAllMedicationComponents() {

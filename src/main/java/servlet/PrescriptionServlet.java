@@ -23,27 +23,25 @@ public class PrescriptionServlet extends HttpServlet {
         try {
             PrescriptionDAO prescriptionDAO = new PrescriptionDAO();
             prescriptionService = new PrescriptionService(prescriptionDAO);
-        } catch (SQLException | IOException e) {
-            e.fillInStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<PrescriptionDTO> prescriptions = null;
         try {
-            List<PrescriptionDTO> prescriptions = prescriptionService.getAllPrescriptionsAsDTO();
-            request.setAttribute("prescriptions", prescriptions);
-            request.getRequestDispatcher("/prescriptions.jsp").forward(request, response);
-        } catch (ServletException | IOException | SQLException e) {
-            e.fillInStackTrace();
+            prescriptions = prescriptionService.getAllPrescriptionsAsDTO();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+        request.setAttribute("prescriptions", prescriptions);
+            request.getRequestDispatcher("/prescriptions.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
             PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
             String action = request.getParameter("action");
             switch (action) {
@@ -51,9 +49,17 @@ public class PrescriptionServlet extends HttpServlet {
                     prescriptionDTO.setPatientID(Integer.parseInt(request.getParameter("addpatientID")));
                     prescriptionDTO.setMedicationID(Integer.parseInt(request.getParameter("addmedicationID")));
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    prescriptionDTO.setDate_of_prescribed(sdf.parse(request.getParameter("adddate_of_prescribed")));
+                    try {
+                        prescriptionDTO.setDate_of_prescribed(sdf.parse(request.getParameter("adddate_of_prescribed")));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     prescriptionDTO.setDosage(request.getParameter("adddosage"));
-                    prescriptionService.addPrescription(prescriptionDTO);
+                    try {
+                        prescriptionService.addPrescription(prescriptionDTO);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                     response.sendRedirect("/prescriptions");
                     break;
                 case "update":
@@ -63,37 +69,38 @@ public class PrescriptionServlet extends HttpServlet {
                     doDelete(request, response);
                     break;
             }
-        } catch (SQLException | ParseException e) {
-            e.fillInStackTrace();
-        }
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
+        prescriptionDTO.setPrescriptionID(Integer.parseInt(req.getParameter("updateprescriptionID")));
+        prescriptionDTO.setPatientID(Integer.parseInt(req.getParameter("updatepatientID")));
+        prescriptionDTO.setMedicationID(Integer.parseInt(req.getParameter("updatemedicationID")));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
-                prescriptionDTO.setPrescriptionID(Integer.parseInt(req.getParameter("updateprescriptionID")));
-                prescriptionDTO.setPatientID(Integer.parseInt(req.getParameter("updatepatientID")));
-                prescriptionDTO.setMedicationID(Integer.parseInt(req.getParameter("updatemedicationID")));
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                prescriptionDTO.setDate_of_prescribed(sdf.parse(req.getParameter("updatedate_of_prescribed")));
-                prescriptionDTO.setDosage(req.getParameter("updatedosage"));
-                prescriptionService.updatePrescription(prescriptionDTO);
-                resp.sendRedirect("/prescriptions");
-        } catch ( SQLException | ParseException | IOException e){
-            e.fillInStackTrace();
+            prescriptionDTO.setDate_of_prescribed(sdf.parse(req.getParameter("updatedate_of_prescribed")));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
+        prescriptionDTO.setDosage(req.getParameter("updatedosage"));
+        try {
+            prescriptionService.updatePrescription(prescriptionDTO);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        resp.sendRedirect("/prescriptions");
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int prescriptionId = Integer.parseInt(req.getParameter("prescription_id"));
         try {
-                int prescriptionId = Integer.parseInt(req.getParameter("prescription_id"));
-                prescriptionService.deletePrescription(prescriptionId);
-                resp.sendRedirect("/prescriptions");
-        } catch (SQLException | IOException e){
-            e.fillInStackTrace();
+            prescriptionService.deletePrescription(prescriptionId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+        resp.sendRedirect("/prescriptions");
     }
 }
 

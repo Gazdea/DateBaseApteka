@@ -12,7 +12,11 @@ public class MedicationDAO {
     private final Connection  connection;
 
     public MedicationDAO() throws SQLException, IOException, ClassNotFoundException {
-        connection = DateBaseConnectionSingleton.getInstance().openConnection();
+        this.connection = DateBaseConnectionSingleton.getInstance().openConnection();
+    }
+
+    public MedicationDAO(Connection connection) throws SQLException, IOException, ClassNotFoundException {
+        this.connection = connection;
     }
 
     // Метод для получения списка всех медикаментов
@@ -41,15 +45,20 @@ public class MedicationDAO {
     }
 
     // Метод для добавления нового медикамента
-    public void addMedicationBuilder(MedicationBuilder MedicationBuilder) {
-        String sql = "INSERT INTO Medications (name, description) VALUES (?, ?)";
+    public int addMedicationBuilder(MedicationBuilder MedicationBuilder) throws SQLException {
+        String sql = "INSERT INTO Medications (name, description) VALUES (?, ?) returning medication_id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, MedicationBuilder.getName());
             preparedStatement.setString(2, MedicationBuilder.getDescription());
-            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
         } catch (SQLException e) {
             e.fillInStackTrace();
         }
+        throw new SQLException();
     }
 
     // Метод для обновления информации о медикаменте
@@ -61,7 +70,7 @@ public class MedicationDAO {
             preparedStatement.setInt(3, MedicationBuilder.getmedication_id());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -79,19 +88,20 @@ public class MedicationDAO {
     public MedicationBuilder getMedicationById(int id) {
         MedicationBuilder medicationBuilder = null;
         String sql = "SELECT * FROM Medications WHERE medication_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            if (resultSet.next()) {
-                int medication_id = resultSet.getInt("medication_id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-                medicationBuilder = new MedicationBuilder.Builder()
-                        .setmMedication_id(medication_id)
-                        .setName(name)
-                        .setDescription(description)
-                        .setComponents(new ComponentDAO().getComponentByMedicamentId(medication_id))
-                        .build();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int medication_id = resultSet.getInt("medication_id");
+                    String name = resultSet.getString("name");
+                    String description = resultSet.getString("description");
+                    medicationBuilder = new MedicationBuilder.Builder()
+                            .setmMedication_id(medication_id)
+                            .setName(name)
+                            .setDescription(description)
+                            .setComponents(new ComponentDAO().getComponentByMedicamentId(medication_id))
+                            .build();
+                }
             }
         } catch (SQLException e) {
             e.fillInStackTrace();

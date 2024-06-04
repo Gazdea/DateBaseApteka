@@ -41,7 +41,7 @@
                             <input type="text" name="component-${component.component_id}" value="${component.name}" disabled>
                         </tr>
                         <tr>
-                            <form action="medications" method="post">
+                            <form action="medicationss" method="post">
                                 <input type="hidden" name="action" value="deletecomponent">
                                 <input type="hidden" name="deletecomponent_id" value="${component.component_id}">
                                 <input type="hidden" name="deletemedication_id" value="${medications.medication_id}">
@@ -99,7 +99,7 @@
         <th>component id</th>
     </tr>
     <tr>
-        <form action="medications" method="post">
+        <form action="medicationss" method="post">
             <input type="hidden" name="action" value="addcomponent">
             <td><input type="text" name="addmedicamentid" required></td>
             <td><input type="text" name="addcomponentid" required></td>

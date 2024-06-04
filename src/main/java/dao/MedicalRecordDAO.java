@@ -15,7 +15,10 @@ public class MedicalRecordDAO {
     private final Connection connection;
 
     public MedicalRecordDAO() throws SQLException, IOException, ClassNotFoundException {
-        connection = DateBaseConnectionSingleton.getInstance().openConnection();
+        this.connection = DateBaseConnectionSingleton.getInstance().openConnection();
+    }
+    public MedicalRecordDAO(Connection connection) throws SQLException, IOException, ClassNotFoundException {
+        this.connection = connection;
     }
 
     // Метод для получения списка всех медицинских записей
@@ -43,15 +46,20 @@ public class MedicalRecordDAO {
     }
 
     // Метод для добавления новой медицинской записи
-    public void addMedicalRecord(MedicalRecordBuilder medicalRecord) {
-        String sql = "INSERT INTO MedicalRecords (patient_id, record_details) VALUES (?, ?)";
+    public int addMedicalRecord(MedicalRecordBuilder medicalRecord) throws SQLException {
+        String sql = "INSERT INTO MedicalRecords (patient_id, record_details) VALUES (?, ?) returning record_id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, medicalRecord.getPatient_id());
             preparedStatement.setString(2, medicalRecord.getRecord_details());
-            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
         } catch (SQLException e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
+        throw new SQLException();
     }
 
     // Метод для обновления информации о медицинской записи
@@ -63,7 +71,7 @@ public class MedicalRecordDAO {
             preparedStatement.setInt(3, medicalRecord.getRecord_id());
             preparedStatement.executeUpdate();
         } catch (SQLException  e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,17 +89,21 @@ public class MedicalRecordDAO {
     public MedicalRecordBuilder getMedicalRecordById(int recordId) {
         MedicalRecordBuilder medicalRecord = null;
         String sql = "SELECT * FROM MedicalRecords WHERE record_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, recordId);
-            if (resultSet.next()) {
-                int record_id = resultSet.getInt("record_id");
-                int patient_id = resultSet.getInt("patient_id");
-                String record_details = resultSet.getString("record_details");
-                medicalRecord = new MedicalRecordBuilder.Builder()
-                        .setRecord_id(record_id)
-                        .setPatient_id(patient_id)
-                        .setRecord_details(record_details)
-                        .build();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+
+                if (resultSet.next()) {
+                    int record_id = resultSet.getInt("record_id");
+                    int patient_id = resultSet.getInt("patient_id");
+                    String record_details = resultSet.getString("record_details");
+                    medicalRecord = new MedicalRecordBuilder.Builder()
+                            .setRecord_id(record_id)
+                            .setPatient_id(patient_id)
+                            .setRecord_details(record_details)
+                            .build();
+                }
             }
         } catch (SQLException e) {
             e.fillInStackTrace();
