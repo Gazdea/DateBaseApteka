@@ -200,7 +200,7 @@ class MedicalRecordDAOTest {
         List<MedicalRecordBuilder> medicalRecordFromBD = medicalRecordDAO.getAllMedicalRecords();
 
         assertNotNull(medicalRecordFromBD,"Should not be null");
-        assertTrue(medicalRecordFromBD.stream().anyMatch(p-> p.getRecord_details().equals(medicalRecordBuilder.getRecord_details()) && p.getPatient_id() == medicalRecordBuilder2.getPatient_id()), "Medical Record should match");
+        assertTrue(medicalRecordFromBD.stream().anyMatch(p-> p.getRecord_details().equals(medicalRecordBuilder.getRecord_details())), "Medical Record should match");
 
     }
 

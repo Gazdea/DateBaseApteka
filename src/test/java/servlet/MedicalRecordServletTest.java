@@ -1,6 +1,5 @@
 package servlet;
 
-import dao.MedicalRecordDAO;
 import dto.MedicalRecordDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.RequestDispatcher;

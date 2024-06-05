@@ -1,8 +1,6 @@
 package servlet;
 
-import dao.MedicationComponentDAO;
 import dto.MedicationComponentDTO;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +34,7 @@ class MedicationComponentServletTest {
     }
 
     @Test
-    void testDoPost() throws IOException, SQLException, ServletException {
+    void testDoPost() throws IOException, SQLException {
         when(request.getParameter("action")).thenReturn("addcomponent");
         when(request.getParameter("addmedicamentid")).thenReturn("1");
         when(request.getParameter("addcomponentid")).thenReturn("2");

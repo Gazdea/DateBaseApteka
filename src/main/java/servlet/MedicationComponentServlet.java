@@ -32,8 +32,6 @@ public class MedicationComponentServlet extends HttpServlet {
             case "addcomponent":
                 medComponentDTO.setMedicationId(Integer.parseInt(request.getParameter("addmedicamentid")));
                 medComponentDTO.setComponentId(Integer.parseInt(request.getParameter("addcomponentid")));
-                System.out.println(medComponentDTO.getMedicationId());
-                System.out.println(medComponentDTO.getComponentId());
                 try {
                     medComponentService.addMedicationComponent(medComponentDTO);
                 } catch (SQLException e) {

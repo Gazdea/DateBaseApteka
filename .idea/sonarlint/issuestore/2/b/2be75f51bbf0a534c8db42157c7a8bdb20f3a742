@@ -1,0 +1,22 @@
+
+	java:S112W"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8§…ÉËş1J$380f555b-a18b-4e84-9d8e-9a8e9e5904fd
+Š
+java:S1192‰"FDefine a constant instead of duplicating this literal "test2" 3 times.(’†ƒ©8«…ÉËş1J$b9a80ce1-6cd6-4b58-9c24-5e3720885258
+¡
+java:S1192u"YDefine a constant instead of duplicating this literal "Description should match" 3 times.(¤¨—Ğÿÿÿÿÿ8¬…ÉËş1J$3c9638a6-b5bd-41f8-94c4-5d04c72060a5
+–
+java:S1192s"SDefine a constant instead of duplicating this literal "Should not be null" 3 times.(¯Ò“ì8¬…ÉËş1J$32b2a901-e3b1-45db-972f-17042b553423
+¤
+java:S1192t"\Define a constant instead of duplicating this literal "Medical Record should match" 4 times.(»¥Àªùÿÿÿÿ8¬…ÉËş1J$b72e6ddf-33e8-473a-9a4f-668805926776
+u
+java:S6126/"2Replace this String concatenation with Text block.(ó›Õ8©†ÉËş1J$661342c4-5ae8-4d75-9d95-e72eaa254413
+z
+java:S61265"2Replace this String concatenation with Text block.(ãßˆáşÿÿÿÿ8ª†ÉËş1J$f19098d9-96e0-4624-b391-c0c908b8226c
+u
+java:S6126;"2Replace this String concatenation with Text block.(½È€ü8ª†ÉËş1J$206367d3-a1bf-4910-8e2f-4fe21504618d
+z
+java:S6126@"2Replace this String concatenation with Text block.(úŞÄ›üÿÿÿÿ8«†ÉËş1J$43eeab06-cc02-4940-a1e1-bae56472a700
+u
+java:S6126I"2Replace this String concatenation with Text block.(®Ã¯×8¬†ÉËş1J$7ee93916-238d-4c84-b2d9-22dd6bef5984
+z
+java:S6126N"2Replace this String concatenation with Text block.(ãÂ×áùÿÿÿÿ8®†ÉËş1J$6c0094cf-f1d3-42c1-84c1-3e670c346257
