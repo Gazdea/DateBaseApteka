@@ -42,8 +42,8 @@ public class PrescriptionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-            PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
-            String action = request.getParameter("action");
+        PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
+        String action = request.getParameter("action");
             switch (action) {
                 case "add":
                     prescriptionDTO.setPatientID(Integer.parseInt(request.getParameter("addpatientID")));

@@ -30,9 +30,9 @@
     </thead>
     <c:forEach var="components" items="${components}">
         <tr>
-            <td><input type="text" name="id-${components.component_id}" value="${components.component_id}" disabled></td>
-            <td><input type="text" name="name-${components.component_id}" value="${components.name}" disabled></td>
-            <td><input type="text" name="description-${components.component_id}" value="${components.description}" disabled></td>
+            <td><input type="text" name="componentid" id="id-${components.component_id}" value="${components.component_id}" disabled></td>
+            <td><input type="text" name="name" id="name-${components.component_id}" value="${components.name}" disabled></td>
+            <td><input type="text" name="description" id="description-${components.component_id}" value="${components.description}" disabled></td>
             <td>
                 <input type="button" value="Select" onclick="editMode(${components.component_id})">
                 <form action="components" method="post">

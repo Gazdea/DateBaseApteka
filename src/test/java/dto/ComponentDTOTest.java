@@ -1,18 +1,12 @@
 package dto;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
 class ComponentDTOTest {
 
-    @Mock
-    private ComponentDTO componentDTO;
 
     @Test
     public void testGetComponentId() {
@@ -49,4 +43,5 @@ class ComponentDTOTest {
         assertEquals(componentDTO, componentDTO.setName("Component A"));
         assertEquals(componentDTO, componentDTO.setDescription("Description for Component A"));
     }
+
 }

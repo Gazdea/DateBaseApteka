@@ -8,6 +8,15 @@ public class ComponentDTO {
     public ComponentDTO() {
     }
 
+    @Override
+    public String toString() {
+        return "ComponentDTO{" +
+                "component_id=" + component_id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public int getComponent_id() {
         return component_id;
     }

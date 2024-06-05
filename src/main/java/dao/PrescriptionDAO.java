@@ -9,52 +9,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrescriptionDAO {
-    private final Connection connection;
+    private Connection connection;
 
     public  PrescriptionDAO() throws SQLException, IOException, ClassNotFoundException {
         connection = DateBaseConnectionSingleton.getInstance().openConnection();
+    }
+
+    public  PrescriptionDAO(Connection connection) {
+        this.connection = connection;
     }
 
     // Метод для получения списка всех рецептов
     public List<PrescriptionBuilder> getAllPrescriptions() {
         List<PrescriptionBuilder> prescriptions = new ArrayList<>();
         String sql = "SELECT * FROM Prescriptions";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
-            while (resultSet.next()) {
-                int prescription_id = resultSet.getInt("prescription_id");
-                int patient_id = resultSet.getInt("patient_id");
-                int medication_id = resultSet.getInt("medication_id");
-                Date date_prescribed = resultSet.getDate("date_prescribed");
-                String dosage = resultSet.getString("dosage");
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int prescription_id = resultSet.getInt("prescription_id");
+                    int patient_id = resultSet.getInt("patient_id");
+                    int medication_id = resultSet.getInt("medication_id");
+                    Date date_prescribed = resultSet.getDate("date_prescribed");
+                    String dosage = resultSet.getString("dosage");
 
-                PrescriptionBuilder prescription = new PrescriptionBuilder.Builder()
-                        .setPrescriptionID(prescription_id)
-                        .setPatientID(patient_id)
-                        .setMedicationID(medication_id)
-                        .setDate_of_prescribed(date_prescribed)
-                        .setDosage(dosage)
-                        .build();
+                    PrescriptionBuilder prescription = new PrescriptionBuilder.Builder()
+                            .setPrescriptionID(prescription_id)
+                            .setPatientID(patient_id)
+                            .setMedicationID(medication_id)
+                            .setDate_of_prescribed(date_prescribed)
+                            .setDosage(dosage)
+                            .build();
 
-                prescriptions.add(prescription);
+                    prescriptions.add(prescription);
+                }
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.fillInStackTrace();
         }
         return prescriptions;
     }
 
     // Метод для добавления нового рецепта
-    public void addPrescription(PrescriptionBuilder prescription) {
-        String sql = "INSERT INTO Prescriptions (patient_id, medication_id, date_prescribed, dosage) VALUES (?, ?, ?, ?)";
+    public int addPrescription(PrescriptionBuilder prescription) {
+        String sql = "INSERT INTO Prescriptions (patient_id, medication_id, date_prescribed, dosage) VALUES (?, ?, ?, ?) returning prescription_id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, prescription.getPatientID());
             preparedStatement.setInt(2, prescription.getMedicationID());
             preparedStatement.setDate(3, new java.sql.Date(prescription.getDate_of_prescribed().getTime()));
             preparedStatement.setString(4, prescription.getDosage());
-            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
         } catch (SQLException e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         }
+        throw new RuntimeException();
     }
 
     // Метод для обновления информации о рецепте
@@ -86,22 +97,23 @@ public class PrescriptionDAO {
     public PrescriptionBuilder getPrescriptionByID(int id) {
         PrescriptionBuilder prescription = null;
         String sql = "SELECT * FROM Prescriptions WHERE prescription_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            if (resultSet.next()) {
-                int prescription_id = resultSet.getInt("prescription_id");
-                int patient_id = resultSet.getInt("patient_id");
-                int medication_id = resultSet.getInt("medication_id");
-                Date date_prescribed = resultSet.getDate("date_prescribed");
-                String dosage = resultSet.getString("dosage");
-                prescription = new PrescriptionBuilder.Builder()
-                        .setPrescriptionID(prescription_id)
-                        .setPatientID(patient_id)
-                        .setMedicationID(medication_id)
-                        .setDate_of_prescribed(date_prescribed)
-                        .setDosage(dosage)
-                        .build();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int prescription_id = resultSet.getInt("prescription_id");
+                    int patient_id = resultSet.getInt("patient_id");
+                    int medication_id = resultSet.getInt("medication_id");
+                    Date date_prescribed = resultSet.getDate("date_prescribed");
+                    String dosage = resultSet.getString("dosage");
+                    prescription = new PrescriptionBuilder.Builder()
+                            .setPrescriptionID(prescription_id)
+                            .setPatientID(patient_id)
+                            .setMedicationID(medication_id)
+                            .setDate_of_prescribed(date_prescribed)
+                            .setDosage(dosage)
+                            .build();
+                }
             }
         } catch (SQLException e) {
             e.fillInStackTrace();

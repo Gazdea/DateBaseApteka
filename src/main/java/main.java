@@ -1,18 +1,31 @@
-import dao.ComponentDAO;
-import dao.MedicalRecordDAO;
-import dao.MedicationDAO;
-import dao.PatientDAO;
-import model.ComponentBuilder;
-import model.MedicalRecordBuilder;
-import model.MedicationBuilder;
+import dao.*;
+import dto.ComponentDTO;
+import dto.MedicationDTO;
+import dto.MedicationMapper;
+import model.*;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
 public class main {
 
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
-        System.out.println(new MedicalRecordDAO().getMedicalRecordById(1));
+        final MedicationDTO medicationDTO = new MedicationDTO();
+        final ComponentDTO componentDTO = new ComponentDTO();
+        componentDTO.setName("name");
+        componentDTO.setDescription("description");
+
+        final MedicationBuilder expectedResult = new MedicationBuilder.Builder()
+                .setDescription("description")
+                .setName("name")
+                .build();
+
+        // Run the test
+        final MedicationBuilder result = MedicationMapper.toEntity(medicationDTO);
+
+        System.out.println(result);
+        System.out.println(expectedResult);
     }
 }

@@ -36,5 +36,4 @@ public class ComponentService {
         componentDAO.deleteComponent(id);
     }
 
-
 }

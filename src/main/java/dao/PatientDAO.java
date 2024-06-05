@@ -14,7 +14,7 @@ public class PatientDAO {
     public PatientDAO() throws SQLException, IOException, ClassNotFoundException {
         connection = DateBaseConnectionSingleton.getInstance().openConnection();
     }
-    public PatientDAO(Connection connection) throws SQLException, IOException, ClassNotFoundException {
+    public PatientDAO(Connection connection) {
         this.connection = connection;
     }
 
@@ -22,20 +22,22 @@ public class PatientDAO {
     public List<PatientBuilder> getAllPatients() {
         List<PatientBuilder> patients = new ArrayList<>();
         String sql = "SELECT * FROM Patients";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()){
-            while (resultSet.next()) {
-                int patient_id = resultSet.getInt("patient_id");
-                String name = resultSet.getString("name");
-                Date birth_date = resultSet.getDate("birth_date");
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int patient_id = resultSet.getInt("patient_id");
+                    String name = resultSet.getString("name");
+                    Date birth_date = resultSet.getDate("birth_date");
 
-                PatientBuilder builder = new PatientBuilder.Builder()
-                        .setPatientID(patient_id)
-                        .setName(name)
-                        .setBirth_date(birth_date)
-                        .setMedicalRecord(new MedicalRecordDAO(connection).getMedicalRecordByPatientId(patient_id))
-                        .build();
+                    PatientBuilder builder = new PatientBuilder.Builder()
+                            .setPatientID(patient_id)
+                            .setName(name)
+                            .setBirth_date(birth_date)
+                            .setMedicalRecord(new MedicalRecordDAO(connection).getMedicalRecordByPatientId(patient_id))
+                            .build();
 
-                patients.add(builder);
+                    patients.add(builder);
+                }
             }
         } catch (SQLException | IOException | ClassNotFoundException  e) {
             e.fillInStackTrace();

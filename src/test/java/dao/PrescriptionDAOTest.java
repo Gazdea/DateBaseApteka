@@ -1,8 +1,8 @@
 package dao;
 
-import model.ComponentBuilder;
-import model.MedicalRecordBuilder;
+import model.MedicationBuilder;
 import model.PatientBuilder;
+import model.PrescriptionBuilder;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MedicalRecordDAOTest {
+class PrescriptionDAOTest {
     @Container
     private  static PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:latest")
@@ -25,8 +25,9 @@ class MedicalRecordDAOTest {
                     .withUsername("test")
                     .withPassword("test");
 
-    private MedicalRecordDAO medicalRecordDAO;
+    private PrescriptionDAO prescriptionDAO;
     private PatientDAO patientDAO;
+    private MedicationDAO medicationDAO;
 
     @BeforeAll
     public void beforeAll() {
@@ -86,8 +87,9 @@ class MedicalRecordDAOTest {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        medicalRecordDAO = new MedicalRecordDAO(connection);
+        medicationDAO = new MedicationDAO(connection);
         patientDAO = new PatientDAO(connection);
+        prescriptionDAO = new PrescriptionDAO(connection);
     }
 
     @AfterAll
@@ -96,7 +98,7 @@ class MedicalRecordDAOTest {
     }
 
     @Test
-    void testAddMedicalRecordAndGetById() throws SQLException {
+    void getAllPrescriptions() throws SQLException {
         PatientBuilder patientBuilder = new PatientBuilder.Builder()
                 .setName("test")
                 .setBirth_date(new Date(123))
@@ -104,108 +106,54 @@ class MedicalRecordDAOTest {
 
         int idpatient = patientDAO.addPatient(patientBuilder);
 
-        MedicalRecordBuilder medicalRecordBuilder = new MedicalRecordBuilder.Builder()
-                .setRecord_details("test")
-                .setPatient_id(idpatient)
-                .build();
-        int idmedrecord = medicalRecordDAO.addMedicalRecord(medicalRecordBuilder);
-
-        MedicalRecordBuilder medicalRecordFromBD = medicalRecordDAO.getMedicalRecordById(idmedrecord);
-
-        assertNotNull(medicalRecordFromBD,"Should not be null");
-        assertEquals(medicalRecordFromBD.getRecord_details(), medicalRecordBuilder.getRecord_details(),"Medical Record should match");
-        assertEquals(medicalRecordFromBD.getPatient_id(), medicalRecordBuilder.getPatient_id(), "Description should match");
-    }
-
-    @Test
-    void updateMedicalRecord() throws SQLException {
-        PatientBuilder patientBuilder = new PatientBuilder.Builder()
+        MedicationBuilder medicationBuilder = new MedicationBuilder.Builder()
                 .setName("test")
-                .setBirth_date(new Date(123))
+                .setDescription("test")
                 .build();
 
-        int idpatient = patientDAO.addPatient(patientBuilder);
+        int idmedicament = medicationDAO.addMedicationBuilder(medicationBuilder);
 
-        MedicalRecordBuilder medicalRecordBuilder = new MedicalRecordBuilder.Builder()
-                .setRecord_details("test")
-                .setPatient_id(idpatient)
-                .build();
-        int idmedrecord = medicalRecordDAO.addMedicalRecord(medicalRecordBuilder);
-
-        MedicalRecordBuilder updateMedicalRecordBuilder = new MedicalRecordBuilder.Builder()
-                .setRecord_id(idmedrecord)
-                .setRecord_details("test2")
-                .setPatient_id(idpatient)
+        PrescriptionBuilder prescriptionBuilder = new PrescriptionBuilder.Builder()
+                .setPatientID(idpatient)
+                .setMedicationID(idmedicament)
+                .setDosage("test")
+                .setDate_of_prescribed(new Date(123))
                 .build();
 
-        medicalRecordDAO.updateMedicalRecord(updateMedicalRecordBuilder);
-
-        MedicalRecordBuilder medicalRecordFromBD = medicalRecordDAO.getMedicalRecordById(idmedrecord);
-
-        assertEquals(medicalRecordFromBD.getRecord_details(), updateMedicalRecordBuilder.getRecord_details(),"Medical Record should match");
-        assertEquals(medicalRecordFromBD.getPatient_id(), updateMedicalRecordBuilder.getPatient_id(), "Description should match");
-
-    }
-
-    @Test
-    void deleteMedicalRecord() throws SQLException {
-        PatientBuilder patientBuilder = new PatientBuilder.Builder()
-                .setName("test")
-                .setBirth_date(new Date(123))
-                .build();
-
-        int idpatient = patientDAO.addPatient(patientBuilder);
-
-        MedicalRecordBuilder medicalRecordBuilder = new MedicalRecordBuilder.Builder()
-                .setRecord_details("test")
-                .setPatient_id(idpatient)
-                .build();
-        int idmedrecord = medicalRecordDAO.addMedicalRecord(medicalRecordBuilder);
-
-
-        medicalRecordDAO.deleteMedicalRecord(idmedrecord);
-
-        MedicalRecordBuilder medicalRecordFromBD = medicalRecordDAO.getMedicalRecordById(idmedrecord);
-        assertNull(medicalRecordFromBD,"Should be null");
-    }
-
-    @Test
-    void getAllMedicalRecord() throws SQLException {
-        PatientBuilder patientBuilder = new PatientBuilder.Builder()
-                .setName("test")
-                .setBirth_date(new Date(123))
-                .build();
-
-        int idpatient = patientDAO.addPatient(patientBuilder);
-
-        MedicalRecordBuilder medicalRecordBuilder = new MedicalRecordBuilder.Builder()
-                .setRecord_details("test")
-                .setPatient_id(idpatient)
-                .build();
-        medicalRecordDAO.addMedicalRecord(medicalRecordBuilder);
+        prescriptionDAO.addPrescription(prescriptionBuilder);
 
         PatientBuilder patientBuilder2 = new PatientBuilder.Builder()
                 .setName("test2")
-                .setBirth_date(new Date(1234))
+                .setBirth_date(new Date(123))
                 .build();
 
         int idpatient2 = patientDAO.addPatient(patientBuilder2);
 
-        MedicalRecordBuilder medicalRecordBuilder2 = new MedicalRecordBuilder.Builder()
-                .setRecord_details("test2")
-                .setPatient_id(idpatient2)
+        MedicationBuilder medicationBuilder2 = new MedicationBuilder.Builder()
+                .setName("test2")
+                .setDescription("test2")
                 .build();
-        medicalRecordDAO.addMedicalRecord(medicalRecordBuilder2);
 
-        List<MedicalRecordBuilder> medicalRecordFromBD = medicalRecordDAO.getAllMedicalRecords();
+        int idmedicament2 = medicationDAO.addMedicationBuilder(medicationBuilder2);
 
-        assertNotNull(medicalRecordFromBD,"Should not be null");
-        assertTrue(medicalRecordFromBD.stream().anyMatch(p-> p.getRecord_details().equals(medicalRecordBuilder.getRecord_details()) && p.getPatient_id() == medicalRecordBuilder2.getPatient_id()), "Medical Record should match");
+        PrescriptionBuilder prescriptionBuilder2 = new PrescriptionBuilder.Builder()
+                .setPatientID(idpatient2)
+                .setMedicationID(idmedicament2)
+                .setDosage("test2")
+                .setDate_of_prescribed(new Date(123))
+                .build();
 
+        prescriptionDAO.addPrescription(prescriptionBuilder2);
+
+        List<PrescriptionBuilder> prescriptions = prescriptionDAO.getAllPrescriptions();
+
+        assertNotNull(prescriptions);
+        assertTrue(prescriptions.stream().anyMatch(p -> p.getDosage().equals(prescriptionBuilder.getDosage())));
+        assertTrue(prescriptions.stream().anyMatch(p -> p.getDosage().equals(prescriptionBuilder2.getDosage())));
     }
 
     @Test
-    void getMedicalRecordByPatientId() throws SQLException {
+    void addPrescriptionAndGetById() throws SQLException {
         PatientBuilder patientBuilder = new PatientBuilder.Builder()
                 .setName("test")
                 .setBirth_date(new Date(123))
@@ -213,17 +161,98 @@ class MedicalRecordDAOTest {
 
         int idpatient = patientDAO.addPatient(patientBuilder);
 
-        MedicalRecordBuilder medicalRecordBuilder = new MedicalRecordBuilder.Builder()
-                .setRecord_details("test")
-                .setPatient_id(idpatient)
+        MedicationBuilder medicationBuilder = new MedicationBuilder.Builder()
+                .setName("test")
+                .setDescription("test")
                 .build();
-        medicalRecordDAO.addMedicalRecord(medicalRecordBuilder);
 
-        MedicalRecordBuilder medicalRecordFromBD = medicalRecordDAO.getMedicalRecordByPatientId(idpatient);
+        int idmedicament = medicationDAO.addMedicationBuilder(medicationBuilder);
 
-        assertNotNull(medicalRecordFromBD,"Should not be null");
-        assertEquals(medicalRecordFromBD.getRecord_details(), medicalRecordBuilder.getRecord_details(),"Medical Record should match");
-        assertEquals(medicalRecordFromBD.getPatient_id(), medicalRecordBuilder.getPatient_id(), "Description should match");
+        PrescriptionBuilder prescriptionBuilder = new PrescriptionBuilder.Builder()
+                .setPatientID(idpatient)
+                .setMedicationID(idmedicament)
+                .setDosage("test")
+                .setDate_of_prescribed(new Date(123))
+                .build();
 
+        int idprescription = prescriptionDAO.addPrescription(prescriptionBuilder);
+
+        PrescriptionBuilder prescriptionFromBd  = prescriptionDAO.getPrescriptionByID(idprescription);
+
+        assertNotNull(prescriptionFromBd);
+        assertEquals(prescriptionFromBd.getMedicationID(), idmedicament);
+        assertEquals(prescriptionFromBd.getDosage(), prescriptionBuilder.getDosage());
+    }
+
+    @Test
+    void updatePrescription() throws SQLException {
+        PatientBuilder patientBuilder = new PatientBuilder.Builder()
+                .setName("test")
+                .setBirth_date(new Date(123))
+                .build();
+
+        int idpatient = patientDAO.addPatient(patientBuilder);
+
+        MedicationBuilder medicationBuilder = new MedicationBuilder.Builder()
+                .setName("test")
+                .setDescription("test")
+                .build();
+
+        int idmedicament = medicationDAO.addMedicationBuilder(medicationBuilder);
+
+        PrescriptionBuilder prescriptionBuilder = new PrescriptionBuilder.Builder()
+                .setPatientID(idpatient)
+                .setMedicationID(idmedicament)
+                .setDosage("test")
+                .setDate_of_prescribed(new Date(123))
+                .build();
+
+        int idprescription = prescriptionDAO.addPrescription(prescriptionBuilder);
+
+        PrescriptionBuilder updatePrescriptionBuilder = new PrescriptionBuilder.Builder()
+                .setPatientID(idpatient)
+                .setMedicationID(idmedicament)
+                .setPrescriptionID(idprescription)
+                .setDosage("test2")
+                .setDate_of_prescribed(new Date(123))
+                .build();
+
+        prescriptionDAO.updatePrescription(updatePrescriptionBuilder);
+
+        PrescriptionBuilder prescriptionFromBd  = prescriptionDAO.getPrescriptionByID(idprescription);
+
+        assertEquals(prescriptionFromBd.getDosage(), updatePrescriptionBuilder.getDosage());
+    }
+
+    @Test
+    void deletePrescription() throws SQLException {
+        PatientBuilder patientBuilder = new PatientBuilder.Builder()
+                .setName("test")
+                .setBirth_date(new Date(123))
+                .build();
+
+        int idpatient = patientDAO.addPatient(patientBuilder);
+
+        MedicationBuilder medicationBuilder = new MedicationBuilder.Builder()
+                .setName("test")
+                .setDescription("test")
+                .build();
+
+        int idmedicament = medicationDAO.addMedicationBuilder(medicationBuilder);
+
+        PrescriptionBuilder prescriptionBuilder = new PrescriptionBuilder.Builder()
+                .setPatientID(idpatient)
+                .setMedicationID(idmedicament)
+                .setDosage("test")
+                .setDate_of_prescribed(new Date(123))
+                .build();
+
+        int idprescription = prescriptionDAO.addPrescription(prescriptionBuilder);
+
+        prescriptionDAO.deletePrescription(idprescription);
+
+        PrescriptionBuilder prescriptionBuilder1 = prescriptionDAO.getPrescriptionByID(idprescription);
+
+        assertNull(prescriptionBuilder1);
     }
 }
