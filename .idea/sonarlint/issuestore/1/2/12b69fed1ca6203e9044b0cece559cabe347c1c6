@@ -1,0 +1,31 @@
+
+	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8áŠÉËş1J$ab81aadb-e39a-4f6d-8949-e4501157395e
+	java:S112&"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8áŠÉËş1J$88efc1cb-927f-4cf2-a092-dcabb0681baa
+	java:S1127"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8áŠÉËş1J$c0259309-4b44-4461-ba84-e6283af6ee0e
+x
+java:S1948"5Make "medComponentService" transient or serializable.(ËÑùé8õŠÉËş1J$bb798a77-7bea-4ae6-8805-34ba8da2fc06
+“
+java:S1301"KReplace this "switch" statement by "if" statements to increase readability.(ë´åİşÿÿÿÿ8‘‹ÉËş1J$895093d4-6ac9-4bdc-8c2c-e4e51ba69291
+i	java:S131""Add a default case to this switch.(ë´åİşÿÿÿÿ8—‹ÉËş1J$438ab932-d79a-4586-9062-f3d319326532
+¡
+java:S1989!"YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(§†Ãúÿÿÿÿ8›‹ÉËş1J$5b14b62c-8ee2-457a-9737-c0ed1c770f61
+¡
+java:S1989""YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(¾‚ãÓøÿÿÿÿ8‹ÉËş1J$6e9ad5b4-294f-4040-9283-52643a5f874b
+ 
+java:S1989$"]Handle the following exception that could be thrown by "addMedicationComponent": IOException.(¤Óµ8¢‹ÉËş1J$b06023a9-bce8-412f-af3b-ff8a6ab5ace1
+‰
+java:S1989&"AHandle the "RuntimeException" thrown here in a "try/catch" block.(Ò‚Òéüÿÿÿÿ8¢‹ÉËş1J$c3c9ca84-04b8-4f77-8219-7a1bca73aed4
+›
+java:S1989("SHandle the following exception that could be thrown by "sendRedirect": IOException.(–¡­Çüÿÿÿÿ8£‹ÉËş1J$ed7f0f3a-d0f2-4375-8694-3d624a1a4f5d
+’
+java:S1989+"OHandle the following exception that could be thrown by "doDelete": IOException.(´ˆª•8©‹ÉËş1J$0cdccd54-be27-441e-b802-880e8296c5bc
+œ
+java:S19892"YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(×–…ª8«‹ÉËş1J$ffc8a5a6-cf01-4b12-ade9-c1d6cde05660
+œ
+java:S19893"YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(ê†¢Ì8¬‹ÉËş1J$554075ba-50e6-4d19-a17c-f2b80c9d6de7
+£
+java:S19895"`Handle the following exception that could be thrown by "deleteMedicationComponent": IOException.(ßòõù8®‹ÉËş1J$d9707ad4-5307-4615-aa54-5672fa9ebf84
+‰
+java:S19897"AHandle the "RuntimeException" thrown here in a "try/catch" block.(Ò‚Òéüÿÿÿÿ8®‹ÉËş1J$68aec4d7-7426-4c8d-8fe8-9fd1cf7de48c
+–
+java:S19899"SHandle the following exception that could be thrown by "sendRedirect": IOException.(Ù£–â8¯‹ÉËş1J$acab8d60-8dd9-420d-b379-be770ee98eab

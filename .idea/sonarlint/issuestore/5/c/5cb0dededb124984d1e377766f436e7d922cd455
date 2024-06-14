@@ -1,0 +1,42 @@
+
+g	java:S112 "FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òιόÿÿÿÿ8Πλώ1
+g	java:S1121"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òιόÿÿÿÿ8Πλώ1
+g	java:S112G"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òιόÿÿÿÿ8Πλώ1
+g	java:S112R"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òιόÿÿÿÿ8Πλώ1
+i
+java:S11923"LDefine a constant instead of duplicating this literal "/components" 3 times.(ΟπΞΛ8ΈΠλώ1
+N
+java:S1948"2Make "componentService" transient or serializable.(νΦj8ΉΠλώ1
+y
+java:S1989"\Handle the following exception that could be thrown by "getAllComponentsAsDTO": IOException.(ƒ’κ8ΝΠλώ1
+c
+java:S1989 "AHandle the "RuntimeException" thrown here in a "try/catch" block.(Ò‚Òιόÿÿÿÿ8ΝΠλώ1
+ƒ
+java:S1989#"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ψ‡Ϋίϊÿÿÿÿ8ΞΠλώ1
+C	java:S131*""Add a default case to this switch.(λ΄εέώÿÿÿÿ8ΤΠλώ1
+p
+java:S1989/"SHandle the following exception that could be thrown by "addComponent": IOException.(¤Β€8ΪΠλώ1
+c
+java:S19891"AHandle the "RuntimeException" thrown here in a "try/catch" block.(Ò‚Òιόÿÿÿÿ8ΪΠλώ1
+p
+java:S19893"SHandle the following exception that could be thrown by "sendRedirect": IOException.(ΟπΞΛ8άΠλώ1
+n
+java:S19896"LHandle the following exception that could be thrown by "doPut": IOException.(θέε—ÿÿÿÿÿ8λΠλώ1
+l
+java:S19899"OHandle the following exception that could be thrown by "doDelete": IOException.(΄ª•8λΠλώ1
+v
+java:S1989A"YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(κ“ΩΡ8μΠλώ1
+x
+java:S1989E"VHandle the following exception that could be thrown by "updateComponent": IOException.(ϊδϊΞϊÿÿÿÿ8μΠλώ1
+c
+java:S1989G"AHandle the "RuntimeException" thrown here in a "try/catch" block.(Ò‚Òιόÿÿÿÿ8μΠλώ1
+u
+java:S1989I"SHandle the following exception that could be thrown by "sendRedirect": IOException.(Σ¤γσύÿÿÿÿ8μΠλώ1
+{
+java:S1989N"YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(Λμρ‰ψÿÿÿÿ8μΠλώ1
+s
+java:S1989P"VHandle the following exception that could be thrown by "deleteComponent": IOException.(Λ®β 8νΠλώ1
+c
+java:S1989R"AHandle the "RuntimeException" thrown here in a "try/catch" block.(Ò‚Òιόÿÿÿÿ8νΠλώ1
+u
+java:S1989T"SHandle the following exception that could be thrown by "sendRedirect": IOException.(Σ¤γσύÿÿÿÿ8ξΠλώ1

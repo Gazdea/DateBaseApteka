@@ -472,3 +472,17 @@ w
 G.idea/sonarlint/issuestore/f/6/f6bd984afc4e8190c49b7416ec84587dfc4c8c51,8\b\8b9dcebe2c2df052faf91626026361611b83afd4
 w
 G.idea/sonarlint/issuestore/f/f/ffdc4379687b47ef9621949dd774d636e788f885,0\1\01802d1ed9daf26729c8ccc18fb591673450a944
+\
+,src/main/java/springConfig/SpringConfig.java,7\e\7e85676902e995da1b4159e11e3a6b7e3e91adee
+e
+5src/main/java/repositories/ComponentRepositories.java,b\5\b57799d70e8479bc4c46b2f788e29ebf62fddbf1
+f
+6src/main/java/repositories/MedicationRepositories.java,2\8\28e437df64fc550b6bd028a3bc847bfd279a9aed
+i
+9src/main/java/repositories/MedicalRecordRepositories.java,c\c\cc3f81fb515b261b1e19ce252b0444cad9894059
+o
+?src/main/java/repositories/MedicationComponentRepositories.java,c\c\ccdbfe2a300d3008abf66bd563d14be1dab18259
+c
+3src/main/java/repositories/PatientRepositories.java,f\9\f9cffbb7a96a113e25e32432ffc0be763ab27682
+h
+8src/main/java/repositories/PrescriptionRepositories.java,f\0\f06cae08843a94bc24556fa039e11c5140e2d9ab
